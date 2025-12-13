@@ -2,9 +2,14 @@ from utils.viewSurf import get_Random_Video_Page_Today_Link, get_Link_From_Video
 from utils.video import extract_Random_Picture_From_Video
 from utils.image import detect_People_In_Picture
 from utils.file_and_folder import init_File_And_Folder, remove_Temp_File
+from utils.open_meteo import get_Meteo_Information_At_Location_To_JSON
+from utils.json import remove_null_and_not_numeric, multiply_value_json
+
+import json
 
 LINKS = {
-    "Camera_Comedie": "https://viewsurf.com/univers/ville/vue/14664-france-languedoc-roussillon-montpellier-place-de-la-comedie"
+    "Camera_Comedie": "https://viewsurf.com/univers/ville/vue/14664-france-languedoc-roussillon-montpellier-place-de-la-comedie",
+    "Meteo_Base_Url": "https://api.open-meteo.com/v1/forecast?latitude=<latitude>&longitude=<longitude>&current=temperature_2m,precipitation,rain,wind_speed_10m,wind_direction_10m,wind_gusts_10m,relative_humidity_2m,apparent_temperature,is_day,showers,snowfall,weather_code,cloud_cover,surface_pressure,pressure_msl"
 }
 TEMP_OUTPUT = {
     "temp_folder": "temp/",
@@ -13,17 +18,28 @@ TEMP_OUTPUT = {
 }
 OUTPUT = {
     "folder": "output/",
-    "People_Detected_Comedie_Picture": "output/Comedie_people_Detecter.jpg"
+    "People_Detected_Comedie_Picture": "output/Comedie_people_Detecter.jpg",
+    "Meteo_Data_JSON": "output/Meteo_data.json"
 }
 
 init_File_And_Folder(TEMP_OUTPUT, OUTPUT)
-randomVideoPageLink = get_Random_Video_Page_Today_Link(LINKS["Camera_Comedie"])
-print(randomVideoPageLink)
-VideoLink = get_Link_From_Video_Page_Link(randomVideoPageLink)
-print(VideoLink)
-Download_Video_From_Video_Link(VideoLink, TEMP_OUTPUT["Camera_Comedie_video"])
-extract_Random_Picture_From_Video(TEMP_OUTPUT["Camera_Comedie_video"], TEMP_OUTPUT["Camera_Comedie_Picture"])
-Number_People_Detected_Comedie = detect_People_In_Picture(TEMP_OUTPUT["Camera_Comedie_Picture"], OUTPUT["People_Detected_Comedie_Picture"])
-remove_Temp_File(TEMP_OUTPUT)
 
-print(Number_People_Detected_Comedie)
+def Number_People_Detected_Comedie() :
+    randomVideoPageLink = get_Random_Video_Page_Today_Link(LINKS["Camera_Comedie"])
+    print(randomVideoPageLink)
+    VideoLink = get_Link_From_Video_Page_Link(randomVideoPageLink)
+    print(VideoLink)
+    Download_Video_From_Video_Link(VideoLink, TEMP_OUTPUT["Camera_Comedie_video"])
+    extract_Random_Picture_From_Video(TEMP_OUTPUT["Camera_Comedie_video"], TEMP_OUTPUT["Camera_Comedie_Picture"])
+    temp_Number_People_Detected_Comedie = detect_People_In_Picture(TEMP_OUTPUT["Camera_Comedie_Picture"], OUTPUT["People_Detected_Comedie_Picture"])
+    remove_Temp_File(TEMP_OUTPUT)
+    return temp_Number_People_Detected_Comedie
+
+def Meteo_Information_At_location(seed):
+    raw_json_data = get_Meteo_Information_At_Location_To_JSON(seed, LINKS["Meteo_Base_Url"])
+    formated_json = remove_null_and_not_numeric(raw_json_data)
+    with open(OUTPUT["Meteo_Data_JSON"], "w", encoding="utf-8") as f:
+        json.dump(formated_json, f, ensure_ascii=False, indent=2)
+
+Number_People = Number_People_Detected_Comedie()
+Meteo_Information_At_location(Number_People)
