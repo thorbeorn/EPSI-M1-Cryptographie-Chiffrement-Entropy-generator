@@ -4,6 +4,7 @@ from utils.image import detect_People_In_Picture
 from utils.file_and_folder import init_File_And_Folder, remove_Temp_File
 from utils.open_meteo import get_Meteo_Information_At_Location_To_JSON
 from utils.json import remove_null_and_not_numeric, multiply_value_json
+from utils.key import generate_256bit_key
 
 import json
 
@@ -19,8 +20,10 @@ TEMP_OUTPUT = {
 OUTPUT = {
     "folder": "output/",
     "People_Detected_Comedie_Picture": "output/Comedie_people_Detecter.jpg",
-    "Meteo_Data_JSON": "output/Meteo_data.json"
+    "Meteo_Data_JSON": "output/Meteo_data.json",
+    "Key_File": "output/generated_key.txt"
 }
+removeTempFile = True
 
 init_File_And_Folder(TEMP_OUTPUT, OUTPUT)
 
@@ -32,7 +35,8 @@ def Number_People_Detected_Comedie() :
     Download_Video_From_Video_Link(VideoLink, TEMP_OUTPUT["Camera_Comedie_video"])
     extract_Random_Picture_From_Video(TEMP_OUTPUT["Camera_Comedie_video"], TEMP_OUTPUT["Camera_Comedie_Picture"])
     temp_Number_People_Detected_Comedie = detect_People_In_Picture(TEMP_OUTPUT["Camera_Comedie_Picture"], OUTPUT["People_Detected_Comedie_Picture"])
-    remove_Temp_File(TEMP_OUTPUT)
+    if removeTempFile :
+        remove_Temp_File(TEMP_OUTPUT)
     return temp_Number_People_Detected_Comedie
 
 def Meteo_Information_At_location(seed):
@@ -40,6 +44,17 @@ def Meteo_Information_At_location(seed):
     formated_json = remove_null_and_not_numeric(raw_json_data)
     with open(OUTPUT["Meteo_Data_JSON"], "w", encoding="utf-8") as f:
         json.dump(formated_json, f, ensure_ascii=False, indent=2)
+    return multiply_value_json(formated_json)
 
 Number_People = Number_People_Detected_Comedie()
-Meteo_Information_At_location(Number_People)
+Number_Meteo = Meteo_Information_At_location(Number_People)
+key_bytes, key_hex = generate_256bit_key(Number_People, Number_Meteo, OUTPUT['Key_File'])
+
+print(f"\n{'='*60}")
+print(f"CLÉ 256 BITS GÉNÉRÉE")
+print(f"{'='*60}")
+print(f"Format hexadécimal: {key_hex}")
+print(f"Format bytes: {key_bytes}")
+print(f"Longueur: {len(key_bytes)} bytes ({len(key_bytes)*8} bits)")
+print(f"Sauvegardée dans: {OUTPUT['Key_File']}")
+print(f"{'='*60}\n")

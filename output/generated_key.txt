@@ -1,0 +1,2 @@
+Clé 256 bits (hex): 4bdfcf3260d36d61e9a63ba71662ae29c284b8efd928c19d14de5c43f4a4b6f3
+Clé 256 bits (bytes): b'K\xdf\xcf2`\xd3ma\xe9\xa6;\xa7\x16b\xae)\xc2\x84\xb8\xef\xd9(\xc1\x9d\x14\xde\\C\xf4\xa4\xb6\xf3'
