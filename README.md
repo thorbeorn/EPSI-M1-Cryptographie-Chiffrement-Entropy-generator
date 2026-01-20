@@ -1,138 +1,198 @@
-# 🎲 Générateur d’Entropie Basé sur une Caméra Urbaine et la Météo
+# 🎲 Générateur d’Entropie Hybride Basé sur le Monde Réel
 
-## 📌 Description du projet
+## 📌 Présentation du projet
 
-Ce projet implémente un **générateur d’entropie original** basé sur des **événements réels et imprévisibles** du monde physique.
+Ce projet implémente un **générateur d’entropie original et expérimental**, fondé sur des **phénomènes réels, humains et environnementaux**, puis exploité dans des **visualisations statistiques** et une **roulette pseudo-aléatoire**.
 
-L’idée principale est d’exploiter :
+L’objectif est de démontrer qu’il est possible de produire une **clé cryptographique 256 bits** à partir :
 
-* une **caméra publique en direct** (Place de la Comédie à Montpellier),
-* le **nombre de personnes présentes à un instant T**,
-* des **données météorologiques dynamiques** issues de l’API Open-Meteo,
+* du **comportement humain** (caméra urbaine),
+* de **données météorologiques réelles**,
+* et de les réutiliser comme **seed fort** pour des systèmes aléatoires.
 
-afin de produire une **clé cryptographique de 256 bits** reposant sur de l’entropie réelle.
-
-Ce générateur répond à la consigne suivante :
-
-> **Créer un générateur d’entropie avec l’idée la plus originale possible.**
+> 🎯 **Consigne respectée : créer un générateur d’entropie avec une idée originale, ancrée dans le monde réel.**
 
 ---
 
-## 💡 Principe de fonctionnement
+## 🧠 Principe général
 
-L’entropie est générée à partir d’une chaîne d’événements indépendants, difficiles à prédire et non déterministes :
+L’entropie est construite par **chaînage de sources indépendantes et imprévisibles** :
 
-1. 📹 **Caméra en direct (ViewSurf – Place de la Comédie, Montpellier)**
+### 1️⃣ Caméra urbaine en direct (Place de la Comédie – Montpellier)
 
-   * Sélection aléatoire d’une vidéo du jour
-   * Extraction d’une image à un instant T
-   * Détection automatique des personnes présentes
+* Récupération d’une vidéo publique (ViewSurf)
+* Extraction d’une image à un instant T
+* Détection automatique des personnes (OpenCV / IA)
 
-2. 👥 **Nombre de personnes détectées**
-
-   * Ce nombre varie constamment et dépend de facteurs humains impossibles à prévoir
-   * Il constitue la **première source d’entropie**
-
-3. 🌍 **Génération de coordonnées géographiques**
-
-   * Le nombre de personnes est utilisé comme **seed**
-   * Il permet de dériver une latitude et une longitude
-
-4. 🌦 **Données météo réelles (Open-Meteo API)**
-
-   * Température
-   * Humidité
-   * Pression
-   * Vent
-   * Précipitations
-   * Couverture nuageuse, etc.
-
-5. 🔢 **Traitement numérique des données météo**
-
-   * Suppression des valeurs nulles ou non numériques
-   * Transformation mathématique pour produire un nombre aléatoire exploitable
-
-6. 🔐 **Génération d’une clé cryptographique 256 bits**
-
-   * Combinaison du nombre de personnes et des données météo
-   * Création d’une clé forte en **bytes** et en **hexadécimal**
+➡️ **Le nombre de personnes détectées constitue la première source d’entropie**
 
 ---
 
-## 🧠 Pourquoi cette source est entropique ?
+### 2️⃣ Dérivation géographique
 
-| Source                     | Justification                          |
-| -------------------------- | -------------------------------------- |
-| 👥 Mouvement humain        | Impossible à prédire précisément       |
-| 📷 Instant T aléatoire     | Dépend du moment d’exécution           |
-| 🌦 Météo réelle            | Variable, chaotique et non contrôlable |
-| 🌍 Géolocalisation dérivée | Dépend directement du monde réel       |
-| 🔗 Chaînage des étapes     | Amplifie l’imprévisibilité             |
-
-➡️ L’ensemble forme une **entropie hybride humaine + environnementale**.
+* Le nombre de personnes est utilisé comme **seed**
+* Génération de coordonnées GPS (latitude / longitude)
 
 ---
 
-## 🗂 Structure du projet
+### 3️⃣ Données météo réelles (API Open-Meteo)
+
+Récupération dynamique de données environnementales :
+
+* Température
+* Humidité
+* Pression atmosphérique
+* Vent
+* Précipitations
+* Couverture nuageuse
+* etc.
+
+➡️ Ces données sont :
+
+* réelles,
+* chaotiques,
+* impossibles à prédire précisément.
+
+---
+
+### 4️⃣ Génération de la clé cryptographique
+
+* Nettoyage et transformation numérique des données
+* Combinaison :
+
+  * nombre de personnes
+  * météo
+* Génération d’une **clé cryptographique de 256 bits**
+
+Formats produits :
+
+* `bytes`
+* `hexadécimal`
+
+---
+
+## 🔐 Exploitation de la clé générée
+
+La clé 256 bits n’est pas seulement générée :
+elle est **réutilisée comme graine forte** pour deux démonstrations visuelles.
+
+---
+
+### 📊 Nuage de points pseudo-aléatoire
+
+* La clé hexadécimale est convertie en seed
+* Génération de **1000 nombres pseudo-aléatoires (0–36)**
+* Visualisation sous forme de **nuage de points**
+
+➡️ Objectif :
+
+* observer la distribution
+* illustrer la qualité du seed issu de l’entropie réelle
+
+📁 Sortie :
+
+```
+output/nuage_points.png
+```
+
+---
+
+### 🎰 Roulette de casino (interface graphique)
+
+* Roulette européenne (0 à 36)
+* La clé 256 bits sert de seed cryptographique
+* Chaque lancer utilise :
+
+  * la clé
+  * un nonce temporel
+* Animation réaliste (Tkinter)
+* Historique des tirages
+
+➡️ Démonstration concrète de l’utilisation d’une entropie réelle
+dans un **système pseudo-aléatoire interactif**
+
+---
+
+## 📂 Nouvelle structure du projet
 
 ```bash
 .
-├── utils/
+├── .venv/                  # Environnement virtuel
+├── config.py               # Configuration globale
+├── entropy.py              # Génération de l’entropie et de la clé
+├── graphique.py            # Nuage de points
+├── roulette.py             # Roulette graphique
+├── main.py                 # Point d’entrée du projet
+├── requirements.txt
+├── README.md
+│
+├── utils/                  # Fonctions utilitaires
 │   ├── viewSurf.py
 │   ├── video.py
 │   ├── image.py
 │   ├── open_meteo.py
-│   ├── json.py
 │   ├── key.py
 │   └── file_and_folder.py
-├── temp/
+│
+├── models/                 # Modèles IA (détection)
+├── temp/                   # Fichiers temporaires
 │   ├── Comedie_video.mp4
 │   └── Comedie_pic.jpg
-├── output/
-│   ├── Comedie_people_Detecter.jpg
-│   ├── Meteo_data.json
-│   └── generated_key.txt
-├── main.py
-└── README.md
+│
+└── output/                 # Résultats
+    ├── Comedie_people_Detecter.jpg
+    ├── Meteo_data.json
+    ├── generated_key.txt
+    └── nuage_points.png
 ```
 
 ---
 
-## 🚀 Utilisation
+## 🚀 Installation et exécution
 
-### 1️⃣ Installer de l'environnement
+### 1️⃣ Création de l’environnement virtuel
 
-### Créer un environnement virtuel
 ```bash
 python3 -m venv .venv
 ```
 
-### Activer l'environnement virtuel
-### Sur macOS/Linux :
+### Activation
+
+**macOS / Linux**
+
 ```bash
 source .venv/bin/activate
 ```
-### Sur Windows :
+
+**Windows**
+
 ```bash
 .venv\Scripts\activate
 ```
 
-# Installer les packages nécessaires
+### 2️⃣ Installation des dépendances
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2️⃣ Lancer le générateur
+---
+
+### 3️⃣ Lancer le projet
 
 ```bash
 python3 main.py
 ```
 
-### 3️⃣ Résultat
+---
+
+## 📤 Résultats générés
 
 * 📸 Image avec détection des personnes
 * 📄 Données météo sauvegardées en JSON
-* 🔐 Clé 256 bits générée et enregistrée
+* 🔐 Clé cryptographique 256 bits
+* 📊 Nuage de points
+* 🎰 Roulette interactive
 
 Exemple de sortie :
 
@@ -147,31 +207,33 @@ Longueur: 32 bytes (256 bits)
 
 ## 🔒 Sécurité et limites
 
-⚠️ Ce projet est **pédagogique** et expérimental :
+⚠️ **Projet pédagogique et expérimental**
 
-* Il démontre la **créativité dans la génération d’entropie**
+* Ne remplace pas un TRNG certifié
+* Dépend de services externes (caméra, API météo)
+* Objectif : **créativité, compréhension et expérimentation**
 
 ---
 
-## 📚 Technologies utilisées
+## 🧪 Concepts abordés
 
-* **Python**
-* **OpenCV / IA (détection de personnes)**
-* **API Open-Meteo**
-* **ViewSurf (caméra publique)**
-* **JSON**
-* **Cryptographie (clé 256 bits)**
+* Entropie réelle
+* Hybridation humain / environnement
+* Seed cryptographique
+* Pseudo-aléatoire
+* Visualisation statistique
+* Interfaces graphiques
+* Cryptographie appliquée
 
 ---
 
 ## ✨ Conclusion
 
-Ce projet montre qu’il est possible de générer de l’entropie à partir :
+Ce projet démontre qu’il est possible de :
 
-* du comportement humain,
-* de phénomènes naturels,
-* et de données temps réel,
+* capter de l’entropie depuis le monde réel,
+* l’amplifier par chaînage de sources,
+* produire une clé cryptographique robuste,
+* et l’exploiter concrètement dans des systèmes aléatoires.
 
-en sortant complètement des sources classiques (horloge, pseudo-aléatoire, seeds statiques).
-
-🎯 **Un générateur d’entropie original, vivant et ancré dans le monde réel.**
+🎯 **Un générateur d’entropie vivant, original et ancré dans la réalité.**
