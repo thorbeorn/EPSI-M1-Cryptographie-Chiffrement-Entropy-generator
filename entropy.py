@@ -8,7 +8,7 @@ from config import TEMP_OUTPUT, OUTPUT, LINKS, DEBUG
 
 import json
 
-def Number_People_Detected_Comedie() :
+def Number_People_Detected_Comedie():
     randomVideoPageLink = get_Random_Video_Page_Today_Link(LINKS["Camera_Comedie"])
     if DEBUG:
         print(randomVideoPageLink)
@@ -27,8 +27,10 @@ def Meteo_Information_At_location(seed):
         json.dump(formated_json, f, ensure_ascii=False, indent=2)
     return multiply_value_json(formated_json)
 
-def entropy_generation() :
+def generate_single_number():
     Number_People = Number_People_Detected_Comedie()
     Number_Meteo = Meteo_Information_At_location(Number_People)
     key_bytes, key_hex = generate_256bit_key(Number_People, Number_Meteo, OUTPUT['Key_File'])
-    return key_bytes, key_hex, Number_People, Number_Meteo
+    seed = int(key_hex, 16)
+    number = seed % 37
+    return number, key_hex
