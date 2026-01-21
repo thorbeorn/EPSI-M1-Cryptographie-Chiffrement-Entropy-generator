@@ -6,3 +6,5 @@ regex
 requests
 ultralytics==8.3.237
 ultralytics-thop==2.0.18
+yt-dlp
+certifi

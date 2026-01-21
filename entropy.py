@@ -5,10 +5,36 @@ from utils.open_meteo import get_Meteo_Information_At_Location_To_JSON
 from utils.json import remove_null_and_not_numeric, multiply_value_json
 from utils.key import generate_256bit_key
 from config import TEMP_OUTPUT, OUTPUT, LINKS, DEBUG
-
+import hashlib
+import time
+import requests
+import yt_dlp
 import json
+
 MAX_RETRIES = 3
 
+def get_sky_entropy_value():
+    """Récupère l'entropie des avions (OpenSky)"""
+    try:
+        url = "https://opensky-network.org/api/states/all?lamin=45.0&lomin=5.0&lamax=50.0&lomax=10.0"
+        r = requests.get(url, timeout=3)
+        h = hashlib.sha256(r.text.encode()).hexdigest()
+        return int(h, 16)
+    except:
+        return time.time_ns()
+
+def get_youtube_entropy_value():
+    """Récupère l'entropie YouTube (Lofi Girl)"""
+    try:
+        ydl_opts = {'quiet': True, 'no_warnings': True}
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info("https://www.youtube.com/watch?v=jfKfPfyJRdk", download=False)
+            data = f"{info.get('view_count')}{time.time_ns()}"
+            h = hashlib.sha256(data.encode()).hexdigest()
+            return int(h, 16)
+    except:
+        return time.time_ns()
+    
 def Number_People_Detected_Comedie():
     for attempt in range(MAX_RETRIES):
         try:
@@ -33,8 +59,8 @@ def Number_People_Detected_Comedie():
             if attempt < MAX_RETRIES - 1:
                 print(f"   Essai avec un autre lien...")
             else:
-                print(f"❌ Échec après {MAX_RETRIES} tentatives avec différents liens")
-                raise Exception(f"Impossible de détecter les personnes après {MAX_RETRIES} tentatives")
+                print(f"❌ Échec après {MAX_RETRIES} tentatives. Utilisation du temps local.")
+                return time.time_ns() % 100 # <--- On renvoie un nombre au lieu de crash
 
 def Meteo_Information_At_location(seed):
     """Récupération météo avec gestion d'erreur"""
@@ -45,16 +71,26 @@ def Meteo_Information_At_location(seed):
             json.dump(formated_json, f, ensure_ascii=False, indent=2)
         return multiply_value_json(formated_json)
     except Exception as e:
-        print(f"❌ Erreur lors de la récupération météo: {e}")
-        raise
+        print(f"❌ Erreur météo: {e}")
+        return time.time_ns() % 1000 # <--- Secours pour ne pas bloquer
 
 def generate_single_number():
+    # 1. Sources originales
     Number_People = Number_People_Detected_Comedie()
     Number_Meteo = Meteo_Information_At_location(Number_People)
-    key_bytes, key_hex = generate_256bit_key(Number_People, Number_Meteo, OUTPUT['Key_File'])
     
-    # Convertir la clé en nombre entre 0 et 36
+    # 2. Nouvelles sources injectées
+    Number_Sky = get_sky_entropy_value()
+    Number_Music = get_youtube_entropy_value()
+    
+    # 3. Mélange XOR avec conversion forcée en INT (pour éviter les erreurs float)
+    key_bytes, key_hex = generate_256bit_key(
+        int(Number_People) ^ int(Number_Sky), 
+        int(Number_Meteo) ^ int(Number_Music), 
+        OUTPUT['Key_File']
+    )
+    
     seed = int(key_hex, 16)
-    number = seed % 37  # Modulo 37 pour obtenir 0-36
+    number = seed % 37 
     
     return number, key_hex
