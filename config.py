@@ -13,7 +13,8 @@ OUTPUT = {
     "Meteo_Data_JSON": "output/Meteo_data.json",
     "Key_File": "output/generated_key.txt",
     "nuage_points_graph": "output/nuage_points_roulette.png",
-    "nuage_points_graph_trie": "output/nuage_points_graph_trie.png"
+    "nuage_points_graph_trie": "output/nuage_points_graph_trie.png",
+    "frequencie_graph": "output/frequencie_graph.png"
 }
 REMOVETEMPFILE = True
 DEBUG = True
