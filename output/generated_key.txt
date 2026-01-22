@@ -1,2 +1,2 @@
-Clé 256 bits (hex): cb1b3203712041a4da9d077d26e97ac32951daf2397125318da6151070ae9479
-Clé 256 bits (bytes): b'\xcb\x1b2\x03q A\xa4\xda\x9d\x07}&\xe9z\xc3)Q\xda\xf29q%1\x8d\xa6\x15\x10p\xae\x94y'
+ClÃ© 256 bits (hex): e6a53ac250841d8e874248f50e2aaa69c8f4c6077497f71162a781cf680e42cd
+ClÃ© 256 bits (bytes): b'\xe6\xa5:\xc2P\x84\x1d\x8e\x87BH\xf5\x0e*\xaai\xc8\xf4\xc6\x07t\x97\xf7\x11b\xa7\x81\xcfh\x0eB\xcd'
