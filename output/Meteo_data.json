@@ -1,0 +1,16 @@
+{
+  "latitude": 48.375,
+  "longitude": -166.5,
+  "generationtime_ms": 0.5161762237548828,
+  "interval": 900,
+  "temperature_2m": 7.0,
+  "wind_speed_10m": 18.3,
+  "wind_direction_10m": 45,
+  "wind_gusts_10m": 25.9,
+  "relative_humidity_2m": 94,
+  "apparent_temperature": 3.4,
+  "weather_code": 3,
+  "cloud_cover": 97,
+  "surface_pressure": 1026.4,
+  "pressure_msl": 1026.4
+}
